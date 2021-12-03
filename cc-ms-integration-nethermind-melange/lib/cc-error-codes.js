@@ -68,4 +68,48 @@ moduleExports.api = {
     }
 };
 
+
+moduleExports.general = {
+
+    action_not_needed: {
+        type: 61,
+        message: 'Action not needed',
+        frontend: {
+            type: 61,
+            message: 'Action not needed'
+        }
+    },
+    action_already_performed: {
+        type: 64,
+        message: 'Action already performed',
+        frontend: {
+            type: 64,
+            message: 'Action already performed'
+        }
+    },
+    field_read_only: {
+        type: 65,
+        message: 'The field you are trying to update or save is readonly',
+        frontend: {
+            type: 65,
+            message: 'The field you are trying to update or save is readonly'
+        }
+    },
+    not_specific: {
+        type: 66,
+        message: 'General error try again later',
+        frontend: {
+            type: 66,
+            message: 'General error try again later'
+        }
+    },
+    invalid_json_data: {
+        type: 68,
+        message: 'JSON parse error',
+        frontend: {
+            type: 66,
+            message: 'General error try again later'
+        }
+    }
+};
 module.exports = moduleExports;

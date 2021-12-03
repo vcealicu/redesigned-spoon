@@ -212,7 +212,7 @@ serverForApi.retrieveAndValidateUser = function(apiKey, endpointToExecute, hitTi
     memoryCache.getDataWithCache(cacheKey, hitTimestamp, function(gotDataCallback) {
         serverForApi.getUserDataFromAuthAPI(apiKey, gotDataCallback);
     }, function(errGettingData, cacheHit, data) {
-        if (errGettingData !== false) {
+        if (errGettingData) {
             retrieveAndValidateUserCallback(errGettingData.message, errGettingData.responseType, data);
             return;
         }
