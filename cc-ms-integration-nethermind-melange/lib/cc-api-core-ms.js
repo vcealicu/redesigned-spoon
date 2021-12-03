@@ -57,13 +57,6 @@ serverForApi.getInfoFromRequest = function(request) {
 
 serverForApi.handleRequest = function(request, response) {
     let { urlObj, callParams, currentClientIp } = serverForApi.getInfoFromRequest(request);
-    if(requestsInFlight[currentClientIp] === undefined){
-        requestsInFlight[currentClientIp] = 1;
-    } else {
-        requestsInFlight[currentClientIp]++;
-        serverForApi.sendResponse(response, httpMoreRequestsNotAllowed, 'application/json', '', true, currentClientIp, responseTypes.notAcceptable);
-        return;
-    }
     
     if (request.method === 'OPTIONS') {
         serverForApi.sendResponse(response, {}, 'application/json', '', true, currentClientIp, responseTypes.ok);
@@ -103,7 +96,7 @@ serverForApi.routeRequestAndRespond = function(requestMethod, response, currentP
 
     let hitTimestamp = Math.floor(new Date().getTime() / 1000);
 
-    endpointToExecute.execute(callParams, hitTimestamp, function(err, responseData, fileName, shouldCache) {
+    endpointToExecute.execute(callParams, hitTimestamp, function(err, responseData, options) {
         if (err) {
             const responseToSend = Object.assign({}, responseBaseObject);
             responseToSend.Response = "Error";
@@ -115,26 +108,22 @@ serverForApi.routeRequestAndRespond = function(requestMethod, response, currentP
                     responseToSend.Type = err.frontend.type;
                 }
             }
-            serverForApi.sendResponse(response, responseToSend, 'application/json', fileName, true, currentClientIp, responseTypes.notAcceptable);
+            serverForApi.sendResponse(response, responseToSend, 'application/json', options, currentClientIp, responseTypes.notAcceptable);
             return;
         }
-        serverForApi.sendResponse(response, responseData, 'image/png', fileName, shouldCache, currentClientIp, responseTypes.ok);
+        serverForApi.sendResponse(response, responseData, endpointToExecute.ResponseType, options, currentClientIp, responseTypes.ok);
     });
 
 };
 
-serverForApi.sendResponse = function(response, responseData, responseContentType, fileName, shouldCache, currentClientIp, statusCode) {
-    requestsInFlight[currentClientIp]--;
-    if(requestsInFlight[currentClientIp] === 0){
-        delete requestsInFlight[currentClientIp];
-    }
+serverForApi.sendResponse = function(response, responseData, responseContentType, options, currentClientIp, statusCode) {
     response.setHeader('Content-Security-Policy', 'frame-ancestors \'none\'');
     response.setHeader('X-Robots-Tag', 'noindex');
-    if(shouldCache){
+    if(options.shouldCache === true){
         response.setHeader('Cache-Control', 'public, max-age=604800, immutable');
     }
     if (responseContentType === 'image/png') {
-        response.setHeader('Content-Disposition', 'inline; filename="' + fileName + '"');
+        response.setHeader('Content-Disposition', 'inline; filename="' + options.filename + '"');
         response.writeHead(statusCode, { 'Content-Type': responseContentType });
         response.end(responseData);
     } else {
