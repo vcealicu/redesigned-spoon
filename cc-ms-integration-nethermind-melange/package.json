@@ -1,4 +1,3 @@
-
 {
     "name": "cc-ms-integration-nethermind-melange",
     "version": "1.0.0",
@@ -8,11 +7,11 @@
     "directories": {},
     "scripts": {
         "build": "",
-        "localhost": "yarn install --force && node cc-ms-integration-nethermind-melange.js",
+        "localhost": "yarn install --force && export PORT=8080 IP=172.31.36.75 && node cc-ms-integration-nethermind-melange.js",
         "prod": "yarn install --force && export PORT=8080 && pm2 start cc-ms-integration-nethermind-melange.js -i max"
     },
     "dependencies": {
-        "node-p5": "^1.0.4"
+        "async": "^3.2.2"
     },
     "devDependencies": {},
     "repository": {
