@@ -1,0 +1,24 @@
+
+{
+    "name": "cc-ms-integration-nethermind-melange",
+    "version": "1.0.0",
+    "description": "cc-ms-integration-nethermind-melange",
+    "main": "cc-ms-integration-nethermind-melange.js",
+    "private": true,
+    "directories": {},
+    "scripts": {
+        "build": "",
+        "localhost": "yarn install --force && node cc-ms-integration-nethermind-melange.js",
+        "prod": "yarn install --force && export PORT=8080 && pm2 start cc-ms-integration-nethermind-melange.js -i max"
+    },
+    "dependencies": {
+        "node-p5": "^1.0.4"
+    },
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vcealicu/redesigned-spoon"
+    },
+    "author": "",
+    "license": "MIT"
+}
